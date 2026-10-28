@@ -23,13 +23,16 @@ def main():
     print("Predicted:", prediction)
     print("Sensitivity scores:", scores)
 
-    fig, axes = plt.subplots(1, 2, figsize=(8, 4))
+    methods = ["black", "mean", "noise"]
+    fig, axes = plt.subplots(1, 4, figsize=(12, 3))
 
     axes[0].imshow(image.squeeze(), cmap="gray")
     axes[0].set_title("Original Image")
 
-    axes[1].imshow(scores.reshape(7, 7), cmap="hot", vmin=0, vmax=1)
-    axes[1].set_title("Sensitivity Heatmap")
+    for i, method in enumerate(methods):
+        scores = sensitivity_score(model, image, method)
+        axes[i + 1].imshow(scores.reshape(7, 7), cmap="hot", vmin=0, vmax=1)
+        axes[i + 1].set_title(method.capitalize())
 
     for ax in axes:
         ax.axis("off")
